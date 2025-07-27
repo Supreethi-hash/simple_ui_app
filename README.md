@@ -10,9 +10,7 @@ Steps:
 
         cd backend
 
-        npm init -y
-
-        npm install express cors
+        npm install 
 
 2\. Run the backend server:
 
