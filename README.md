@@ -56,9 +56,7 @@ Inside that folder, initialize a React app:
 
 cd frontend
 
-npx create-react-app .
-
-Replace the content of src/App.js with the React frontend code I gave you.
+Run command -> npm install
 
 
 
