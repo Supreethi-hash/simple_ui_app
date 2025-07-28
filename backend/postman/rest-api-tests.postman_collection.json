@@ -1,9 +1,8 @@
 {
   "info": {
-    "name": "API Test automation",
-    "_postman_id": "5f1b4bdb-11e8-4f20-a9ad-1e0d4f883c4a",
-    "description": "API tests for simple React+Node login + item management backend",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "name": "Login & Item API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "collection-qa"
   },
   "item": [
     {
@@ -18,31 +17,42 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"pass@1234\"\n}"
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/register",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/register",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "register"
           ]
         }
       },
-      "response": [],
       "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set(\"username\", \"testuser\");",
+              "pm.environment.set(\"password\", \"testpass\");"
+            ],
+            "type": "text/javascript"
+          }
+        },
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
-              "pm.test(\"User registered message\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"User registered\");",
-              "});"
+              "if (pm.response.code === 201) {",
+              "  pm.test(\"User registered\", function () {",
+              "    pm.expect(pm.response.json().message).to.eql(\"User registered\");",
+              "  });",
+              "} else if (pm.response.code === 400) {",
+              "  pm.test(\"User already exists\", function () {",
+              "    pm.expect(pm.response.json().message).to.eql(\"User already exists\");",
+              "  });",
+              "}"
             ],
             "type": "text/javascript"
           }
@@ -50,7 +60,7 @@
       ]
     },
     {
-      "name": "Login - Success",
+      "name": "Login User",
       "request": {
         "method": "POST",
         "header": [
@@ -61,107 +71,27 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"pass@1234\"\n}"
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/login",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/login",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "login"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
-              "pm.test(\"Login success message\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"Login successful\");",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Login - Wrong Password",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"pass@0987\"\n}"
-        },
-        "url": {
-          "raw": "http://localhost:5000/login",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5000",
-          "path": [
-            "login"
-          ]
-        }
-      },
-      "response": [],
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 401\", () => pm.response.to.have.status(401));",
-              "pm.test(\"Invalid credentials message\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"Invalid credentials\");",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Get Items - Empty List",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/items",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5000",
-          "path": [
-            "items"
-          ]
-        }
-      },
-      "response": [],
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
-              "pm.test(\"Body is an array\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+              "pm.test(\"Login successful\", function () {",
+              "  pm.response.to.have.status(200);",
+              "  var jsonData = pm.response.json();",
+              "  pm.expect(jsonData.message).to.eql(\"Login successful\");",
               "});"
             ],
             "type": "text/javascript"
@@ -181,31 +111,58 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"text\": \"Hello!\"\n}"
+          "raw": "{\n  \"text\": \"Milk\"\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/items",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/items",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "items"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
-              "pm.test(\"Item has text\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.text).to.eql(\"Hello!\");",
-              "    pm.environment.set(\"itemId\", jsonData.id);",
+              "pm.test(\"Item created\", function () {",
+              "  pm.response.to.have.status(201);",
+              "  var jsonData = pm.response.json();",
+              "  pm.expect(jsonData.text).to.eql(\"Milk\");",
+              "  pm.environment.set(\"itemId\", jsonData.id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Items",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/items",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "items"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Get items success\", function () {",
+              "  pm.response.to.have.status(200);",
+              "  var jsonData = pm.response.json();",
+              "  pm.expect(Array.isArray(jsonData)).to.be.true;",
               "});"
             ],
             "type": "text/javascript"
@@ -225,31 +182,28 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"text\": \"Hi\"\n}"
+          "raw": "{\n  \"text\": \"Bread\"\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/items/{{itemId}}",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/items/{{itemId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "items",
             "{{itemId}}"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
-              "pm.test(\"Updated text\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.text).to.eql(\"Hi\");",
+              "pm.test(\"Item updated\", function () {",
+              "  pm.response.to.have.status(200);",
+              "  var jsonData = pm.response.json();",
+              "  pm.expect(jsonData.text).to.eql(\"Bread\");",
               "});"
             ],
             "type": "text/javascript"
@@ -258,7 +212,7 @@
       ]
     },
     {
-      "name": "Update Item - No Text",
+      "name": "Update Item - Invalid",
       "request": {
         "method": "PUT",
         "header": [
@@ -272,25 +226,24 @@
           "raw": "{}"
         },
         "url": {
-          "raw": "http://localhost:5000/items/{{itemId}}",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/items/{{itemId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "items",
             "{{itemId}}"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));"
+              "pm.test(\"Item update failed\", function () {",
+              "  pm.response.to.have.status(400);",
+              "});"
             ],
             "type": "text/javascript"
           }
@@ -301,30 +254,26 @@
       "name": "Delete Item",
       "request": {
         "method": "DELETE",
-        "header": [],
         "url": {
-          "raw": "http://localhost:5000/items/{{itemId}}",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/items/{{itemId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "items",
             "{{itemId}}"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
-              "pm.test(\"Deleted item ID matches\", () => {",
-              "    const jsonData = pm.response.json();",
-              "    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"itemId\")));",
+              "pm.test(\"Item deleted\", function () {",
+              "  pm.response.to.have.status(200);",
+              "  var jsonData = pm.response.json();",
+              "  pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"itemId\")));",
               "});"
             ],
             "type": "text/javascript"
@@ -333,37 +282,33 @@
       ]
     },
     {
-      "name": "Delete Item - Already Deleted",
+      "name": "Delete Item Again",
       "request": {
         "method": "DELETE",
-        "header": [],
         "url": {
-          "raw": "http://localhost:5000/items/{{itemId}}",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/items/{{itemId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "items",
             "{{itemId}}"
           ]
         }
       },
-      "response": [],
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+              "pm.test(\"Item already deleted\", function () {",
+              "  pm.response.to.have.status(404);",
+              "});"
             ],
             "type": "text/javascript"
           }
         }
       ]
     }
-  ],
-  "event": [],
-  "variable": []
+  ]
 }

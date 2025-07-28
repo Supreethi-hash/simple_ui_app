@@ -1,0 +1,29 @@
+{
+  "id": "env-qa",
+  "name": "Local QA Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "enabled": true
+    },
+    {
+      "key": "username",
+      "value": "testuser",
+      "enabled": true
+    },
+    {
+      "key": "password",
+      "value": "testpass",
+      "enabled": true
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-07-28T22:43:11.114399Z",
+  "_postman_exported_using": "PostmanAutomationScript"
+}
