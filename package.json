@@ -4,9 +4,9 @@
   "description": "1\\. Backend (Node.js server)",
   "main": "index.js",
   "scripts": {
-    "backend": "cd backend && npm init -y && npm install && node server.js",
-    "frontend": "cd frontend && npm install && npm start",
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && node server.js",
+    "frontend": "cd frontend && npm start",
     "test:example": "playwright test"
   },
   "repository": {
