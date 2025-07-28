@@ -1,32 +1,20 @@
-\# Postman API Tests
+How to Run the Tests:
 
+	cd backend
 
+Start your Node.js server:
 
-This folder contains the Postman collection for automated API testing of the backend server.
+	node server.js
 
+Import files into Postman:
+	postman/rest-api-tests.postman_collection.json
+	postman/postman-local-env.json
 
+Open Postman -> Import -> Choose the JSON files above.
 
-\## Files
+Select the environment: Choose "Local QA Environment" from the top-right dropdown in Postman.
 
+Run the collection:
 
-
-\- `rest-api-tests.postman\_collection.json`: Postman collection covering `/register`, `/login`, `/items` endpoints with positive and negative test cases.
-
-
-
-\## Running Tests
-
-
-
-\### Using Postman App
-
-
-
-1\. Open Postman desktop app or \[Postman web](https://web.postman.co/).
-
-2\. Import the `rest-api-tests.postman\_collection.json` file.
-
-3\. Make sure your backend server is running (default at http://localhost:5000).
-
-4\. Run the requests individually or use the Collection Runner to run all tests at once.
+	Use the Collection Runner
 
