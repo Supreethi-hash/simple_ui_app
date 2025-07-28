@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "backend": "cd backend && node server.js",
-    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && npm init -y && npm install && node server.js",
+    "frontend": "cd frontend && npm install && npm start",
     "test:example": "playwright test"
   },
   "repository": {
