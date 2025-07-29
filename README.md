@@ -63,6 +63,6 @@ The backend server on port 5000 handles API calls.
 
         npm.cmd install --save-dev concurrently
 
-3. Run the tests from the project root (make sure both backend and frontend servers are running):
+3. Run the tests from the project root (make sure both backend and frontend servers are running,execute testcases one by one by clicking on the run button on right side correspondilgly  due to data dependency):
 
         npx playwright test --ui
