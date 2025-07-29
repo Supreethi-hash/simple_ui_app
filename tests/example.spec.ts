@@ -1,8 +1,19 @@
-import { test, expect } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('http://localhost:3000');
+export class LoginPage {
+  constructor(private page: Page) {}
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/React/);
-});
+  async goto() {
+    await this.page.goto('http://localhost:3000'); // Replace with your actual login URL
+  }
+
+  async login(username: string, password: string) {
+    await this.page.locator('input[placeholder="Username"]').fill("creatingnew");
+    await this.page.locator('input[placeholder="Password"]').fill("1234");
+    await this.page.getByRole('button', { name: 'Login' }).click();
+  }
+
+  async verifyLandingPage() {
+    await expect(this.page.locator('h2')).toHaveText('Your Items');
+  }
+}

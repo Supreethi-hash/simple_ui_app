@@ -51,3 +51,18 @@ You can register a new user or login with existing credentials. After login, you
 
 The backend server on port 5000 handles API calls.
 
+---
+
+**4\. Running Playwright UI Tests**
+
+1. Install Playwright (if not already installed):
+
+        npm install --save-dev @playwright/test
+
+2. Install concurrently package as dev dependency:
+
+        npm.cmd install --save-dev concurrently
+
+3. Run the tests from the project root (make sure both backend and frontend servers are running):
+
+        npx playwright test --ui
